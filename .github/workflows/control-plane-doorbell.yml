@@ -24,10 +24,10 @@ jobs:
           CONTROL_PLANE_URL: ${{ secrets.CONTROL_PLANE_URL }}
           CONTROL_PLANE_SECRET: ${{ secrets.CONTROL_PLANE_SECRET }}
           EVENT_NAME: ${{ github.event_name }}
-          EVENT_PATH: ${{ github.event_path }}
+          EVENT_JSON: ${{ toJSON(github.event) }}
         run: |
-          curl -sSf -X POST "${CONTROL_PLANE_URL}/hooks/github" \
+          printf '%s' "$EVENT_JSON" | curl -sSf -X POST "${CONTROL_PLANE_URL}/hooks/github" \
             -H "content-type: application/json" \
             -H "x-github-event: ${EVENT_NAME}" \
             -H "x-control-plane-secret: ${CONTROL_PLANE_SECRET}" \
-            --data @"${EVENT_PATH}"
+            --data @-
