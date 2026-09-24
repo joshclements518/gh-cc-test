@@ -1,0 +1,32 @@
+name: control-plane-doorbell
+
+# Thin doorbell: forwards raw GitHub events to the always-on control plane.
+# NO stage logic lives here — the control plane's state machine owns every
+# transition, gate, and label flip. Required secrets:
+#   CONTROL_PLANE_URL    — base URL of the control plane (e.g. https://cp.example.com)
+#   CONTROL_PLANE_SECRET — shared secret sent in the x-control-plane-secret header
+
+on:
+  issues:
+    types: [labeled, unlabeled]
+  issue_comment:
+    types: [created]
+  workflow_run:
+    types: [completed]
+
+jobs:
+  doorbell:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forward event to the control plane
+        env:
+          CONTROL_PLANE_URL: ${{ secrets.CONTROL_PLANE_URL }}
+          CONTROL_PLANE_SECRET: ${{ secrets.CONTROL_PLANE_SECRET }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_PATH: ${{ github.event_path }}
+        run: |
+          curl -sSf -X POST "${CONTROL_PLANE_URL}/hooks/github" \
+            -H "content-type: application/json" \
+            -H "x-github-event: ${EVENT_NAME}" \
+            -H "x-control-plane-secret: ${CONTROL_PLANE_SECRET}" \
+            --data @"${EVENT_PATH}"
