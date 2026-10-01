@@ -3,7 +3,8 @@ function hello(name = "World") {
 }
 
 if (require.main === module) {
-  console.log(hello());
+  const args = process.argv.slice(2).filter((arg) => arg.trim() !== "");
+  console.log(args.length > 0 ? hello(args.join(" ")) : hello());
 }
 
 module.exports = { hello };
