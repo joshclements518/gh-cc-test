@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friday Snack Vote - Cast Your Vote</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🍿 Friday Snack Vote</h1>
+        
+        <div id="loading" class="loading">Loading poll...</div>
+        
+        <div id="pollContainer" class="hidden">
+            <h2 id="pollTitle"></h2>
+            <p class="subtitle" id="closesInfo"></p>
+            
+            <form id="voteForm">
+                <div id="optionsContainer" class="vote-options">
+                    <!-- Options will be loaded here -->
+                </div>
+                <button type="submit" class="btn-primary">Cast Vote</button>
+            </form>
+        </div>
+
+        <div id="error" class="error hidden">
+            <p id="errorMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const voterId = getOrCreateVoterId();
+
+        function getOrCreateVoterId() {
+            let id = localStorage.getItem('voterId');
+            if (!id) {
+                id = Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('voterId', id);
+            }
+            return id;
+        }
+
+        async function loadPoll() {
+            if (!token) {
+                showError('Invalid poll link');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/poll/${token}`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error);
+                    return;
+                }
+
+                displayPoll(data);
+            } catch (error) {
+                showError('Failed to load poll');
+            }
+        }
+
+        function displayPoll(poll) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('pollContainer').classList.remove('hidden');
+            
+            document.getElementById('pollTitle').textContent = poll.title;
+            
+            if (poll.closesAt) {
+                const closesDate = new Date(poll.closesAt);
+                document.getElementById('closesInfo').textContent = 
+                    `Closes: ${closesDate.toLocaleString()}`;
+            }
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            poll.options.forEach(option => {
+                const label = document.createElement('label');
+                label.className = 'vote-option';
+                label.innerHTML = `
+                    <input type="radio" name="option" value="${option.id}" required>
+                    <span>${option.text}</span>
+                `;
+                optionsContainer.appendChild(label);
+            });
+        }
+
+        function showError(message) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        document.getElementById('voteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (!selectedOption) {
+                alert('Please select an option');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token,
+                        optionId: parseInt(selectedOption.value),
+                        voterId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = '/success.html';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to submit vote: ' + error.message);
+            }
+        });
+
+        // Load poll on page load
+        loadPoll();
+    </script>
+</body>
+</html>
