@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Friday Snack Poll</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    input[type="text"],
+    input[type="datetime-local"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus,
+    input[type="datetime-local"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .options-container {
+      margin-bottom: 20px;
+    }
+    
+    .option-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .option-input input {
+      flex: 1;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: #667eea;
+      color: white;
+      width: 100%;
+    }
+    
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+    
+    .btn-remove {
+      background: #ff6b6b;
+      color: white;
+      padding: 12px 16px;
+    }
+    
+    .btn-remove:hover {
+      background: #ff5252;
+    }
+    
+    .result-container {
+      display: none;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .result-container.active {
+      display: block;
+    }
+    
+    .share-url {
+      background: white;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      padding: 15px;
+      word-break: break-all;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    
+    .success-icon {
+      color: #51cf66;
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Friday Snack Poll</h1>
+    <p class="subtitle">Create a poll for your team to vote on this Friday's snack</p>
+    
+    <form id="pollForm">
+      <div class="form-group">
+        <label for="title">Poll Title</label>
+        <input type="text" id="title" name="title" placeholder="What should we have for Friday snacks?" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="closesAt">Poll Closes At</label>
+        <input type="datetime-local" id="closesAt" name="closesAt" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Snack Options (minimum 2)</label>
+        <div class="options-container" id="optionsContainer">
+          <div class="option-input">
+            <input type="text" class="option" placeholder="Option 1" required>
+          </div>
+          <div class="option-input">
+            <input type="text" class="option" placeholder="Option 2" required>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="addOption()">+ Add Option</button>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Create Poll</button>
+    </form>
+    
+    <div id="result" class="result-container">
+      <div class="success-icon">&#10003;</div>
+      <h2 style="text-align: center; margin-bottom: 15px; color: #333;">Poll Created!</h2>
+      <p style="margin-bottom: 10px; color: #666;">Share this link with your team:</p>
+      <div class="share-url" id="shareUrl"></div>
+      <button class="btn btn-primary" onclick="copyToClipboard()">Copy Link</button>
+      <button class="btn btn-secondary" onclick="resetForm()" style="margin-top: 10px; width: 100%;">Create Another Poll</button>
+    </div>
+  </div>
+  
+  <script>
+    let optionCount = 2;
+    
+    function addOption() {
+      optionCount++;
+      const container = document.getElementById('optionsContainer');
+      const div = document.createElement('div');
+      div.className = 'option-input';
+      div.innerHTML = `
+        <input type="text" class="option" placeholder="Option ${optionCount}" required>
+        <button type="button" class="btn btn-remove" onclick="removeOption(this)">×</button>
+      `;
+      container.appendChild(div);
+    }
+    
+    function removeOption(btn) {
+      btn.parentElement.remove();
+    }
+    
+    function copyToClipboard() {
+      const url = document.getElementById('shareUrl').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Link copied to clipboard!');
+      });
+    }
+    
+    function resetForm() {
+      document.getElementById('pollForm').reset();
+      document.getElementById('result').classList.remove('active');
+      document.getElementById('pollForm').style.display = 'block';
+      
+      // Reset options to initial state
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = `
+        <div class="option-input">
+          <input type="text" class="option" placeholder="Option 1" required>
+        </div>
+        <div class="option-input">
+          <input type="text" class="option" placeholder="Option 2" required>
+        </div>
+      `;
+      optionCount = 2;
+    }
+    
+    document.getElementById('pollForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value;
+      const closesAt = document.getElementById('closesAt').value;
+      const options = Array.from(document.querySelectorAll('.option'))
+        .map(input => input.value)
+        .filter(val => val.trim() !== '');
+      
+      if (options.length < 2) {
+        alert('Please provide at least 2 options');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/polls', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ title, options, closesAt })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          document.getElementById('shareUrl').textContent = data.shareUrl;
+          document.getElementById('pollForm').style.display = 'none';
+          document.getElementById('result').classList.add('active');
+        } else {
+          alert('Error creating poll: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        alert('Error creating poll: ' + error.message);
+      }
+    });
+    
+    // Set default closing time to Friday 5 PM this week
+    window.addEventListener('DOMContentLoaded', () => {
+      const now = new Date();
+      const friday = new Date(now);
+      const daysUntilFriday = (5 - now.getDay() + 7) % 7 || 7;
+      friday.setDate(now.getDate() + daysUntilFriday);
+      friday.setHours(17, 0, 0, 0);
+      
+      document.getElementById('closesAt').value = friday.toISOString().slice(0, 16);
+    });
+  </script>
+</body>
+</html>
