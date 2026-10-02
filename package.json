@@ -1,0 +1,16 @@
+{
+  "name": "friday-snack-vote",
+  "version": "1.0.0",
+  "description": "Simple poll app for Friday snack voting",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "keywords": ["poll", "voting", "snacks"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
