@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke
+        run: |
+          echo "CI ok for ${{ github.head_ref }}"
+          test -n "${{ github.event.pull_request.number }}"
