@@ -13,13 +13,15 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   String query = '';
   String? category;
+  bool wellnessFilter = false;
 
   List<Venue> get filtered {
     return MockCatalog.venues.where((v) {
       final q = query.trim().toLowerCase();
       final matchesQ = q.isEmpty || v.name.toLowerCase().contains(q) || v.tags.any((t) => t.contains(q));
       final matchesC = category == null || v.category == category;
-      return matchesQ && matchesC;
+      final matchesWellness = !wellnessFilter || (v.category == 'Spa' || v.category == 'Fitness');
+      return matchesQ && matchesC && matchesWellness;
     }).toList();
   }
 
@@ -50,16 +52,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
                     label: const Text('All'),
-                    selected: category == null,
-                    onSelected: (_) => setState(() => category = null),
+                    selected: category == null && !wellnessFilter,
+                    onSelected: (_) => setState(() {
+                      category = null;
+                      wellnessFilter = false;
+                    }),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    label: const Text('Wellness'),
+                    selected: wellnessFilter,
+                    onSelected: (_) => setState(() {
+                      wellnessFilter = !wellnessFilter;
+                      category = null;
+                    }),
                   ),
                 ),
                 ...cats.map((c) => Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: FilterChip(
                         label: Text(c),
-                        selected: category == c,
-                        onSelected: (_) => setState(() => category = c),
+                        selected: category == c && !wellnessFilter,
+                        onSelected: (_) => setState(() {
+                          category = c;
+                          wellnessFilter = false;
+                        }),
                       ),
                     )),
               ],
@@ -91,18 +110,32 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ),
           ),
           const SectionLabel('Venues'),
-          ...filtered.map((v) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: HlCard(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(v.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    subtitle: Text('${v.deck} · ${v.category}\n${v.blurb}'),
-                    isThreeLine: true,
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => VenueDetailScreen(venueId: v.id))),
+          if (filtered.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Center(
+                child: Text(
+                  'No results found',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 16,
                   ),
                 ),
-              )),
+              ),
+            )
+          else
+            ...filtered.map((v) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: HlCard(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(v.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                      subtitle: Text('${v.deck} · ${v.category}\n${v.blurb}'),
+                      isThreeLine: true,
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => VenueDetailScreen(venueId: v.id))),
+                    ),
+                  ),
+                )),
           const SectionLabel('Ship tools'),
           _Tool('Deck plans', Icons.map_outlined, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DeckPlansScreen()))),
           _Tool('Map & directions', Icons.directions, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MapDirectionsScreen()))),
