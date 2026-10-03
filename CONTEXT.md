@@ -1,0 +1,1 @@
+- Definition of the Wellness filter chip and its behavior in the app.
