@@ -4,6 +4,7 @@ import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
 import '../plans/plans_screen.dart';
+import '../polls/poll_results_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -63,6 +64,19 @@ class HomeScreen extends StatelessWidget {
                       Expanded(child: _ActionTile(icon: Icons.star_outline, label: 'Activities', onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ActivityDetailScreen(eventId: 'e5')));
                       })),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(child: _ActionTile(icon: Icons.poll_outlined, label: 'Poll Results', onTap: () {
+                        final poll = MockCatalog.polls.first;
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => PollResultsScreen(poll: poll)));
+                      })),
+                      const SizedBox(width: 10),
+                      const Expanded(child: SizedBox()),
+                      const SizedBox(width: 10),
+                      const Expanded(child: SizedBox()),
                     ],
                   ),
                   const SectionLabel('Up next'),

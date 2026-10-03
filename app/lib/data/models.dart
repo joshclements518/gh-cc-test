@@ -154,3 +154,38 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class PollOption {
+  const PollOption({
+    required this.id,
+    required this.text,
+    required this.voteCount,
+  });
+  final String id;
+  final String text;
+  final int voteCount;
+}
+
+class Poll {
+  const Poll({
+    required this.id,
+    required this.title,
+    required this.options,
+    required this.isActive,
+    required this.shareToken,
+  });
+  final String id;
+  final String title;
+  final List<PollOption> options;
+  final bool isActive;
+  final String shareToken;
+  
+  PollOption? get winningOption {
+    if (options.isEmpty) return null;
+    return options.reduce((a, b) => a.voteCount > b.voteCount ? a : b);
+  }
+  
+  int get totalVotes {
+    return options.fold(0, (sum, option) => sum + option.voteCount);
+  }
+}

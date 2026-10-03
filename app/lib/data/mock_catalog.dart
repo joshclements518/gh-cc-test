@@ -212,4 +212,19 @@ abstract final class MockCatalog {
       description: 'Calm-water kayaking for beginners. Life vests provided.',
     ),
   ];
+
+  static final polls = <Poll>[
+    Poll(
+      id: 'poll-friday-snacks',
+      title: 'Friday Snack Vote',
+      shareToken: 'abc123xyz',
+      isActive: false,
+      options: const [
+        PollOption(id: 'opt-1', text: 'Trail mix', voteCount: 8),
+        PollOption(id: 'opt-2', text: 'Fresh fruit', voteCount: 15),
+        PollOption(id: 'opt-3', text: 'Cookies', voteCount: 12),
+        PollOption(id: 'opt-4', text: 'Veggie sticks', voteCount: 5),
+      ],
+    ),
+  ];
 }
