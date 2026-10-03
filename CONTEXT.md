@@ -1,0 +1,1 @@
+- Define the categories for venues in `MockCatalog`.
