@@ -13,12 +13,21 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   String query = '';
   String? category;
+  bool isWellnessFilter = false;
 
   List<Venue> get filtered {
     return MockCatalog.venues.where((v) {
       final q = query.trim().toLowerCase();
       final matchesQ = q.isEmpty || v.name.toLowerCase().contains(q) || v.tags.any((t) => t.contains(q));
-      final matchesC = category == null || v.category == category;
+      
+      // Handle Wellness filter (Spa or Fitness)
+      bool matchesC;
+      if (isWellnessFilter) {
+        matchesC = v.category == 'Spa' || v.category == 'Fitness';
+      } else {
+        matchesC = category == null || v.category == category;
+      }
+      
       return matchesQ && matchesC;
     }).toList();
   }
@@ -50,16 +59,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
                     label: const Text('All'),
-                    selected: category == null,
-                    onSelected: (_) => setState(() => category = null),
+                    selected: category == null && !isWellnessFilter,
+                    onSelected: (_) => setState(() {
+                      category = null;
+                      isWellnessFilter = false;
+                    }),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    label: const Text('Wellness'),
+                    selected: isWellnessFilter,
+                    onSelected: (_) => setState(() {
+                      category = null;
+                      isWellnessFilter = true;
+                    }),
                   ),
                 ),
                 ...cats.map((c) => Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: FilterChip(
                         label: Text(c),
-                        selected: category == c,
-                        onSelected: (_) => setState(() => category = c),
+                        selected: category == c && !isWellnessFilter,
+                        onSelected: (_) => setState(() {
+                          category = c;
+                          isWellnessFilter = false;
+                        }),
                       ),
                     )),
               ],
