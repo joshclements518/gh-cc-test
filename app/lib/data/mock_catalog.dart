@@ -212,4 +212,25 @@ abstract final class MockCatalog {
       description: 'Calm-water kayaking for beginners. Life vests provided.',
     ),
   ];
+
+  static final samplePoll = Poll(
+    id: 'poll-friday-snack',
+    title: 'Friday Snack Vote',
+    shareToken: 'abc123xyz',
+    endTime: DateTime(2026, 10, 2, 17, 0),
+    isActive: false,
+    options: const [
+      SnackOption(id: 'opt-1', name: 'Chocolate Chip Cookies', voteCount: 15),
+      SnackOption(id: 'opt-2', name: 'Fresh Fruit Platter', voteCount: 8),
+      SnackOption(id: 'opt-3', name: 'Veggie Tray with Hummus', voteCount: 12),
+      SnackOption(id: 'opt-4', name: 'Mixed Nuts', voteCount: 5),
+    ],
+  );
+
+  static final sampleVotes = [
+    Vote(id: 'v1', pollId: 'poll-friday-snack', optionId: 'opt-1', timestamp: DateTime(2026, 10, 1, 10, 30)),
+    Vote(id: 'v2', pollId: 'poll-friday-snack', optionId: 'opt-1', timestamp: DateTime(2026, 10, 1, 11, 15)),
+    Vote(id: 'v3', pollId: 'poll-friday-snack', optionId: 'opt-2', timestamp: DateTime(2026, 10, 1, 12, 0)),
+    Vote(id: 'v4', pollId: 'poll-friday-snack', optionId: 'opt-3', timestamp: DateTime(2026, 10, 1, 13, 45)),
+  ];
 }

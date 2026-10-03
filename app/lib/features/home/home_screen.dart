@@ -4,6 +4,7 @@ import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
 import '../plans/plans_screen.dart';
+import '../polls/poll_results_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -83,6 +84,46 @@ class HomeScreen extends StatelessWidget {
                     color: HlTokens.coral,
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const DiningRotationScreen()),
+                    ),
+                  ),
+                  const SectionLabel('Poll Results'),
+                  HlCard(
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const PollResultsScreen(pollId: 'poll-friday-snack')),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 52,
+                            height: 52,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: HlTokens.gold,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: const Icon(Icons.poll, color: Colors.white, size: 28),
+                          ),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Friday Snack Vote',
+                                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  'Results are in! See what won.',
+                                  style: TextStyle(color: HlTokens.inkSoft, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right, color: HlTokens.inkSoft),
+                        ],
+                      ),
                     ),
                   ),
                   if (!onBoard) ...[

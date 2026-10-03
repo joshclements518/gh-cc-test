@@ -154,3 +154,55 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class Poll {
+  const Poll({
+    required this.id,
+    required this.title,
+    required this.options,
+    required this.shareToken,
+    required this.endTime,
+    this.isActive = true,
+  });
+  final String id;
+  final String title;
+  final List<SnackOption> options;
+  final String shareToken;
+  final DateTime endTime;
+  final bool isActive;
+}
+
+class SnackOption {
+  const SnackOption({
+    required this.id,
+    required this.name,
+    this.voteCount = 0,
+  });
+  final String id;
+  final String name;
+  final int voteCount;
+}
+
+class Vote {
+  const Vote({
+    required this.id,
+    required this.pollId,
+    required this.optionId,
+    required this.timestamp,
+  });
+  final String id;
+  final String pollId;
+  final String optionId;
+  final DateTime timestamp;
+}
+
+class PollResult {
+  const PollResult({
+    required this.poll,
+    required this.winningOption,
+    required this.totalVotes,
+  });
+  final Poll poll;
+  final SnackOption winningOption;
+  final int totalVotes;
+}

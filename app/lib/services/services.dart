@@ -58,6 +58,64 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class PollService {
+  final List<Poll> _polls = [];
+  final List<Vote> _votes = [];
+
+  /// Get poll by ID
+  Poll? getPoll(String pollId) {
+    try {
+      return _polls.firstWhere((p) => p.id == pollId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Calculate poll results
+  PollResult? getPollResult(String pollId) {
+    final poll = getPoll(pollId);
+    if (poll == null) return null;
+
+    // Find winning option (the one with most votes)
+    SnackOption? winningOption;
+    int maxVotes = 0;
+    
+    for (final option in poll.options) {
+      if (option.voteCount > maxVotes) {
+        maxVotes = option.voteCount;
+        winningOption = option;
+      }
+    }
+
+    if (winningOption == null && poll.options.isNotEmpty) {
+      winningOption = poll.options.first;
+    }
+
+    final totalVotes = poll.options.fold<int>(0, (sum, opt) => sum + opt.voteCount);
+
+    return winningOption != null
+        ? PollResult(
+            poll: poll,
+            winningOption: winningOption,
+            totalVotes: totalVotes,
+          )
+        : null;
+  }
+
+  /// Add a vote
+  void addVote(Vote vote) {
+    _votes.add(vote);
+  }
+
+  /// Create a new poll
+  void createPoll(Poll poll) {
+    _polls.add(poll);
+  }
+
+  /// Get all polls
+  List<Poll> getAllPolls() => List.unmodifiable(_polls);
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +128,14 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        polls = PollService() {
+    // Initialize with sample poll data
+    polls.createPoll(MockCatalog.samplePoll);
+    for (final vote in MockCatalog.sampleVotes) {
+      polls.addVote(vote);
+    }
+  }
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +148,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final PollService polls;
 }
