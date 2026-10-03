@@ -154,3 +154,18 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class Poll {
+  Poll({
+    required this.id,
+    required this.title,
+    required this.options,
+    required this.shareToken,
+    this.createdAt,
+  });
+  final String id;
+  final String title;
+  final List<String> options;
+  final String shareToken;
+  final DateTime? createdAt;
+}

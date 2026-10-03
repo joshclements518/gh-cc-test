@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/models.dart';
 import '../services/services.dart';
 
 enum VoyageMode { atHome, onBoard }
@@ -9,6 +10,7 @@ class AppState extends ChangeNotifier {
   final HarborlineServices services;
   VoyageMode mode = VoyageMode.onBoard;
   String? lastHybridResult;
+  final List<Poll> _polls = [];
 
   bool get signedIn => services.auth.isSignedIn;
 
@@ -62,6 +64,22 @@ class AppState extends ChangeNotifier {
     await services.hybrid.openFlow(name);
     lastHybridResult = '$name submitted (demo)';
     notifyListeners();
+  }
+
+  // Poll management
+  List<Poll> get polls => List.unmodifiable(_polls);
+
+  void savePoll(Poll poll) {
+    _polls.add(poll);
+    notifyListeners();
+  }
+
+  Poll? getPollByToken(String token) {
+    try {
+      return _polls.firstWhere((p) => p.shareToken == token);
+    } catch (_) {
+      return null;
+    }
   }
 }
 

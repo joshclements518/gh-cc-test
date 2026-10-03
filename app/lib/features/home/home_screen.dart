@@ -4,6 +4,7 @@ import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
 import '../plans/plans_screen.dart';
+import '../poll/create_poll_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -83,6 +84,58 @@ class HomeScreen extends StatelessWidget {
                     color: HlTokens.coral,
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const DiningRotationScreen()),
+                    ),
+                  ),
+                  const SectionLabel('Friday Snacks'),
+                  HlCard(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'Create a snack poll',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Let your team vote on snacks',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: HlTokens.inkSoft,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const CreatePollScreen(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: HlTokens.sea,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text('Create'),
+                        ),
+                      ],
                     ),
                   ),
                   if (!onBoard) ...[
