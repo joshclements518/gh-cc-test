@@ -18,7 +18,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return MockCatalog.venues.where((v) {
       final q = query.trim().toLowerCase();
       final matchesQ = q.isEmpty || v.name.toLowerCase().contains(q) || v.tags.any((t) => t.contains(q));
-      final matchesC = category == null || v.category == category;
+      final matchesC = category == null
+          || (category == 'Probe' && v.category == 'Dining')
+          || v.category == category;
       return matchesQ && matchesC;
     }).toList();
   }
@@ -52,6 +54,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     label: const Text('All'),
                     selected: category == null,
                     onSelected: (_) => setState(() => category = null),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    label: const Text('Probe'),
+                    selected: category == 'Probe',
+                    onSelected: (_) => setState(() => category = 'Probe'),
                   ),
                 ),
                 ...cats.map((c) => Padding(
