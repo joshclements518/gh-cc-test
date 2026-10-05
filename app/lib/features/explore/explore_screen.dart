@@ -19,7 +19,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       final q = query.trim().toLowerCase();
       final matchesQ = q.isEmpty || v.name.toLowerCase().contains(q) || v.tags.any((t) => t.contains(q));
       final matchesC = category == null
-          || (category == 'Probe' && v.category == 'Spa')
+          || (category == 'Probe' && v.category == 'Dining')
           || v.category == category;
       return matchesQ && matchesC;
     }).toList();
