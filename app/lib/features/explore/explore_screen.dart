@@ -18,7 +18,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return MockCatalog.venues.where((v) {
       final q = query.trim().toLowerCase();
       final matchesQ = q.isEmpty || v.name.toLowerCase().contains(q) || v.tags.any((t) => t.contains(q));
-      final matchesC = category == null || v.category == category;
+      // Wellness is a pseudo-category that matches Spa OR Fitness (ADR-001)
+      final matchesC = category == null || 
+                       (category == 'Wellness' ? (v.category == 'Spa' || v.category == 'Fitness') : v.category == category);
       return matchesQ && matchesC;
     }).toList();
   }
@@ -26,6 +28,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     final cats = MockCatalog.venues.map((v) => v.category).toSet().toList()..sort();
+    // Inject Wellness pseudo-category after Fitness (ADR-002)
+    final fitnessIndex = cats.indexOf('Fitness');
+    if (fitnessIndex != -1) {
+      cats.insert(fitnessIndex + 1, 'Wellness');
+    } else {
+      cats.add('Wellness');
+    }
     return Scaffold(
       appBar: AppBar(title: const Text('Explore')),
       body: ListView(
