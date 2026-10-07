@@ -1,4 +1,0 @@
-{
-  "paths": ["test/integrated.test.js"],
-  "trustedSuiteSources": ["github-actions"]
-}
