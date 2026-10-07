@@ -116,7 +116,7 @@ abstract final class MockCatalog {
     Venue(id: 'v2', name: 'Harbor Grill', deck: 'Deck 11', category: 'Dining', blurb: 'Casual grill and salads with anytime seating.', hours: '11:30a–10p', tags: ['casual', 'anytime']),
     Venue(id: 'v3', name: 'Aurora Theater', deck: 'Deck 4', category: 'Entertainment', blurb: 'Main stage productions and guest lectures.', hours: 'Show nights', tags: ['shows']),
     Venue(id: 'v4', name: 'Sky Deck Pool', deck: 'Deck 14', category: 'Recreation', blurb: 'Open-air pool, cabanas, and sail-away gatherings.', hours: '7a–10p', tags: ['pool', 'family']),
-    Venue(id: 'v5', name: 'Chart Room Spa', deck: 'Deck 12', category: 'Spa', blurb: 'Thermal suite and treatment rooms overlooking the wake.', hours: '8a–8p', tags: ['spa']),
+    Venue(id: 'v5', name: 'Chart Room Spa', deck: 'Deck 12', category: 'Spa', blurb: 'Thermal suite and treatment rooms overlooking the wake.', hours: '8a–8p', tags: ['spa', 'thermal']),
     Venue(id: 'v6', name: 'Kids Cove', deck: 'Deck 10', category: 'Youth', blurb: 'Supervised clubs by age group with evening hours.', hours: '9a–10p', tags: ['kids']),
     Venue(id: 'v7', name: 'Beacon Lounge', deck: 'Deck 8', category: 'Lounge', blurb: 'Quiet cocktails and acoustic sets after dinner.', hours: '5p–midnight', tags: ['nightlife']),
     Venue(id: 'v8', name: 'Fitness Studio', deck: 'Deck 14 Fwd', category: 'Fitness', blurb: 'Classes and open gym with sea views.', hours: '6a–9p', tags: ['fitness']),
