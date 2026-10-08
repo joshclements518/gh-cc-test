@@ -8,7 +8,9 @@ name: control-plane-doorbell
 
 on:
   issues:
-    types: [labeled, unlabeled]
+    # closed/reopened required for ASTC Flight path to drop crafts when humans
+    # close issues in the GitHub UI (not only label hops / in-process harness).
+    types: [labeled, unlabeled, opened, edited, closed, reopened]
   issue_comment:
     types: [created, edited]
   workflow_run:
