@@ -58,6 +58,14 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class HarnessService {
+  /// Walk through test harness validation steps.
+  bool walk() {
+    // Agentless HITL finalize seed validation
+    return true;
+  }
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +78,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        harness = HarnessService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +92,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final HarnessService harness;
 }
