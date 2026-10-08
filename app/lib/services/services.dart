@@ -58,6 +58,35 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class HarnessWalkService {
+  /// Harness walk functionality for story 1231
+  bool _isWalking = false;
+  int _stepCount = 0;
+
+  bool get isWalking => _isWalking;
+  int get stepCount => _stepCount;
+
+  void startWalk() {
+    _isWalking = true;
+    _stepCount = 0;
+  }
+
+  void recordStep() {
+    if (_isWalking) {
+      _stepCount++;
+    }
+  }
+
+  void stopWalk() {
+    _isWalking = false;
+  }
+
+  void resetWalk() {
+    _isWalking = false;
+    _stepCount = 0;
+  }
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +99,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        harnessWalk = HarnessWalkService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +113,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final HarnessWalkService harnessWalk;
 }
