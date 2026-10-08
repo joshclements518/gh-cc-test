@@ -64,6 +64,12 @@ class HarnessService {
     // Agentless HITL finalize seed validation
     return true;
   }
+
+  /// Run the test harness suite.
+  bool run() {
+    // Execute harness test suite for agentless HITL validation
+    return walk();
+  }
 }
 
 class HarborlineServices {
