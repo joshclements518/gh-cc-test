@@ -1,6 +1,8 @@
 import '../data/mock_catalog.dart';
 import '../data/models.dart';
 
+export 'harness_walk.dart';
+
 /// Core + external facades (mock implementations — no vendor SDKs).
 class AuthService {
   bool _signedIn = false;
