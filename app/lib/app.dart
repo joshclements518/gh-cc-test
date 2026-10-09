@@ -4,6 +4,9 @@ import 'features/shell/main_shell.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
 
+/// Harness walk feature flag for story 1330
+const bool kHarnessWalkEnabled = true;
+
 class HarborlineApp extends StatelessWidget {
   const HarborlineApp({super.key, required this.state});
   final AppState state;
