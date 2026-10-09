@@ -11,4 +11,11 @@ void main() {
     expect(MockCatalog.folio.length, greaterThanOrEqualTo(3));
     expect(MockCatalog.guest.displayName.isNotEmpty, isTrue);
   });
+
+  test('Harness walks catalog has minimum entries', () {
+    expect(MockCatalog.harnessWalks.length, greaterThanOrEqualTo(3));
+    expect(MockCatalog.harnessWalks.first.id.isNotEmpty, isTrue);
+    expect(MockCatalog.harnessWalks.first.name.isNotEmpty, isTrue);
+    expect(MockCatalog.harnessWalks.first.durationMinutes, greaterThan(0));
+  });
 }

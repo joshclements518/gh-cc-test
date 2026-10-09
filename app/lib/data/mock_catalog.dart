@@ -212,4 +212,55 @@ abstract final class MockCatalog {
       description: 'Calm-water kayaking for beginners. Life vests provided.',
     ),
   ];
+
+  static final harnessWalks = [
+    HarnessWalk(
+      id: 'hw1',
+      name: 'Deck Discovery Walk',
+      description: 'Explore the ship deck by deck with guided stops at key venues.',
+      durationMinutes: 45,
+      difficulty: WalkDifficulty.easy,
+      startLocation: 'Deck 5 Midship',
+    ),
+    HarnessWalk(
+      id: 'hw2',
+      name: 'Sunset Promenade',
+      description: 'Evening walk along the outer decks as the sun sets over the ocean.',
+      durationMinutes: 30,
+      difficulty: WalkDifficulty.easy,
+      startLocation: 'Deck 12 Aft',
+    ),
+    HarnessWalk(
+      id: 'hw3',
+      name: 'Fitness Trail Circuit',
+      description: 'Challenging multi-deck fitness walk with stair climbing.',
+      durationMinutes: 60,
+      difficulty: WalkDifficulty.challenging,
+      startLocation: 'Sports Deck',
+    ),
+  ];
+}
+
+class HarnessWalk {
+  const HarnessWalk({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.durationMinutes,
+    required this.difficulty,
+    required this.startLocation,
+  });
+  
+  final String id;
+  final String name;
+  final String description;
+  final int durationMinutes;
+  final WalkDifficulty difficulty;
+  final String startLocation;
+}
+
+enum WalkDifficulty {
+  easy,
+  moderate,
+  challenging,
 }

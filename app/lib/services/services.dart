@@ -58,6 +58,54 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class HarnessWalkService {
+  final List<WalkActivity> _walks = [];
+  
+  List<WalkActivity> get walks => List.unmodifiable(_walks);
+  
+  void addWalk(WalkActivity walk) {
+    _walks.add(walk);
+  }
+  
+  void removeWalk(String id) {
+    _walks.removeWhere((w) => w.id == id);
+  }
+  
+  WalkActivity? getWalk(String id) {
+    try {
+      return _walks.firstWhere((w) => w.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
+  
+  int get activeWalkCount => _walks.where((w) => w.status == WalkStatus.active).length;
+}
+
+class WalkActivity {
+  const WalkActivity({
+    required this.id,
+    required this.name,
+    required this.startTime,
+    required this.duration,
+    required this.location,
+    this.status = WalkStatus.scheduled,
+  });
+  
+  final String id;
+  final String name;
+  final DateTime startTime;
+  final Duration duration;
+  final String location;
+  final WalkStatus status;
+}
+
+enum WalkStatus {
+  scheduled,
+  active,
+  completed,
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +118,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        harnessWalk = HarnessWalkService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +132,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final HarnessWalkService harnessWalk;
 }

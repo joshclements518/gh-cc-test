@@ -99,6 +99,16 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                  const SectionLabel('Harness Walks'),
+                  ...MockCatalog.harnessWalks.take(2).map((walk) => Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: HarnessWalkCard(
+                      walk: walk,
+                      onTap: () {
+                        state.services.analytics.track('harness_walk_viewed', {'walk_id': walk.id});
+                      },
+                    ),
+                  )),
                 ],
               ),
             ),
