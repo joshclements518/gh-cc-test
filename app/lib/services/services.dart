@@ -58,6 +58,22 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class HarnessWalkService {
+  final List<String> _walkPoints = [];
+  
+  List<String> get walkPoints => List.unmodifiable(_walkPoints);
+  
+  void recordWalkPoint(String point) {
+    _walkPoints.add(point);
+  }
+  
+  void clearWalk() {
+    _walkPoints.clear();
+  }
+  
+  int get walkCount => _walkPoints.length;
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +86,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        harnessWalk = HarnessWalkService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +100,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final HarnessWalkService harnessWalk;
 }
