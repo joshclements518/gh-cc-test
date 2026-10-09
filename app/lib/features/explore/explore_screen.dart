@@ -104,6 +104,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
               )),
           const SectionLabel('Ship tools'),
+          _Tool('Ship walks', Icons.directions_walk, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShipWalksScreen()))),
           _Tool('Deck plans', Icons.map_outlined, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DeckPlansScreen()))),
           _Tool('Map & directions', Icons.directions, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MapDirectionsScreen()))),
           _Tool('Articles', Icons.menu_book_outlined, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ArticlesScreen()))),
@@ -271,6 +272,61 @@ class ArticleDetailScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ShipWalksScreen extends StatelessWidget {
+  const ShipWalksScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final walks = [
+      {'name': 'Harness Walk', 'duration': '15 min', 'description': 'Guided tour of essential safety equipment and muster stations'},
+      {'name': 'Wellness Walk', 'duration': '20 min', 'description': 'Scenic route through spa, fitness center, and outdoor promenades'},
+      {'name': 'Heritage Walk', 'duration': '30 min', 'description': 'Explore ship history, art installations, and maritime traditions'},
+    ];
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Ship walks')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          HlCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                DisplayTitle('Self-guided tours'),
+                SizedBox(height: 8),
+                Text('Explore the ship with these curated walking routes. Follow signs and crew guidance for the best experience.', 
+                  style: TextStyle(color: HlTokens.inkSoft, height: 1.45)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          ...walks.map((walk) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: HlCard(
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: HlTokens.foam,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.directions_walk, color: HlTokens.sea),
+                ),
+                title: Text(walk['name']!, style: const TextStyle(fontWeight: FontWeight.w700)),
+                subtitle: Text('${walk['duration']} · ${walk['description']}'),
+                isThreeLine: true,
+                trailing: const Icon(Icons.chevron_right, color: HlTokens.inkSoft),
+                onTap: () {},
+              ),
+            ),
+          )),
+        ],
       ),
     );
   }
