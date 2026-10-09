@@ -1,5 +1,6 @@
 import '../data/mock_catalog.dart';
 import '../data/models.dart';
+import 'harness_walk_service.dart';
 
 /// Core + external facades (mock implementations — no vendor SDKs).
 class AuthService {
@@ -70,7 +71,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        harnessWalk = HarnessWalkService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +85,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final HarnessWalkService harnessWalk;
 }
