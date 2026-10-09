@@ -181,6 +181,13 @@ abstract final class MockCatalog {
     ),
   ];
 
+  static final harnessWalk = Article(
+    id: 'harness1',
+    title: 'Harness Walk Experience',
+    summary: 'Guided deck walk with safety harness demonstration.',
+    body: 'Join our crew for a guided tour of the ship\'s outer decks with a safety harness demonstration. Perfect for adventure seekers who want to learn about maritime safety while enjoying panoramic ocean views.',
+  );
+
   static final spotlights = <SpotlightItem>[
     SpotlightItem(title: 'Tonight in Aurora Theater', subtitle: 'First Light · 7:30p · Deck 4'),
     SpotlightItem(title: 'Chef’s tasting at Coral Room', subtitle: 'Ask your server about the tasting flight'),

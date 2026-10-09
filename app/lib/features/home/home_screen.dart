@@ -4,6 +4,7 @@ import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
 import '../plans/plans_screen.dart';
+import 'harness_walk_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -65,6 +66,10 @@ class HomeScreen extends StatelessWidget {
                       })),
                     ],
                   ),
+                  const SizedBox(height: 10),
+                  _ActionTile(icon: Icons.explore_outlined, label: 'Harness Walk', onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HarnessWalkScreen()));
+                  }),
                   const SectionLabel('Up next'),
                   _NextCard(
                     time: '7:30\nPM',
