@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../data/mock_catalog.dart';
-import '../../services/release_info.dart';
 import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
+import '../../ui/widgets/release_tips_banner.dart';
 import '../plans/plans_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -48,15 +48,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        Text(
-                          'UI ${ReleaseInfo.uiShort} · API ${ReleaseInfo.apiShort}',
-                          style: const TextStyle(
-                            color: HlTokens.inkSoft,
-                            fontFamily: 'monospace',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        const ReleaseTipsBanner(),
                       ],
                     ),
                   ),
