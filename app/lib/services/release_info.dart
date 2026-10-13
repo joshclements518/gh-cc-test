@@ -25,10 +25,8 @@ class ReleaseInfo {
   static const bakedUiSha = String.fromEnvironment('UI_SHA', defaultValue: 'unknown');
 
   /// Where to read the **live** API tip. Default: same-origin nginx proxy.
-  static const apiHealthUrl = String.fromEnvironment(
-    'API_HEALTH_URL',
-    defaultValue: '/release/api-healthz',
-  );
+  /// Absolute API `/healthz` URL (set at image build). Tip SHA is read live.
+  static const apiHealthUrl = String.fromEnvironment('API_HEALTH_URL', defaultValue: '');
 
   static Future<String?> _shaFrom(String url) async {
     final res = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 10));
