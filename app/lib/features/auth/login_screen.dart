@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/release_info.dart';
 import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 
@@ -64,6 +65,50 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text('MV Aether Dawn · Eastern Isles · Oct 12–19',
                           style: TextStyle(color: Colors.white.withOpacity(0.85))),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.22),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: Colors.white24),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'RELEASE TIPS',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.7),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                          fontSize: 11,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'UI  ${ReleaseInfo.uiShort}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'monospace',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'API ${ReleaseInfo.apiShort}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'monospace',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ],
                   ),
                 ),

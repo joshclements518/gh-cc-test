@@ -1,13 +1,9 @@
-# Built from gh-cc-test (Harborline Navigator) tree — ACC-F11 dual-repo deployable.
-# Serves a thin web identity surface from this repo (Flutter app lives under app/).
-FROM node:22-slim
-WORKDIR /app
-COPY deploy/package.json ./
-COPY deploy/server.js ./
-COPY README.md ./README.md
-COPY app/docs ./app/docs
-COPY app/pubspec.yaml ./app/pubspec.yaml
-ENV PORT=8080
-ENV NODE_ENV=production
+# ACC-F11 — UI deployable is Flutter web (not this Dockerfile alone).
+# Build/push via control-plane:
+#   UI_SHA=... API_SHA=... bash scripts/build-dual-repo-images.sh
+# which runs `flutter build web` with --dart-define=UI_SHA/API_SHA and packs nginx:alpine.
+#
+# This file documents the intended runtime layout for operators reading the repo.
+FROM nginx:1.27-alpine
+# Expect image layers to provide /usr/share/nginx/html (Flutter web) + conf on :8080
 EXPOSE 8080
-CMD ["node", "server.js"]

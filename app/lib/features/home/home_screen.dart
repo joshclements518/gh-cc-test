@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/mock_catalog.dart';
+import '../../services/release_info.dart';
 import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
@@ -45,6 +46,16 @@ class HomeScreen extends StatelessWidget {
                             SoftChip(onBoard ? 'Mustering done' : 'Check-in opens soon'),
                             SoftChip('Folio \$${res.folioTotal.toStringAsFixed(0)}'),
                           ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'UI ${ReleaseInfo.uiShort} · API ${ReleaseInfo.apiShort}',
+                          style: const TextStyle(
+                            color: HlTokens.inkSoft,
+                            fontFamily: 'monospace',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
