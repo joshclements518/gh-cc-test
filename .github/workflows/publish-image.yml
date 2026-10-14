@@ -1,0 +1,58 @@
+name: publish-image
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: 'Optional commit SHA (default: github.sha)'
+        required: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.sha || github.sha }}
+          fetch-depth: 0
+      - name: Tip SHA
+        id: tip
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: stable
+          cache: true
+      - name: Flutter web build
+        env:
+          API_HEALTH_URL: ${{ secrets.AICP_APP_API_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$API_HEALTH_URL"
+          cd app
+          flutter pub get
+          flutter build web --release --base-href / \
+            --dart-define="UI_SHA=${{ steps.tip.outputs.sha }}" \
+            --dart-define="API_HEALTH_URL=${API_HEALTH_URL}"
+          test -f build/web/main.dart.js
+          ! grep -q 'Welcome to nginx' build/web/index.html
+      - name: healthz.json
+        run: |
+          SHORT=$(echo "${{ steps.tip.outputs.sha }}" | cut -c1-12)
+          printf '%s\n' "{\"ok\":true,\"service\":\"harborline-navigator\",\"brand\":\"Harborline Navigator\",\"repo\":\"joshclements518/gh-cc-test\",\"mode\":\"flutter-web\",\"sha\":\"${SHORT}\"}" \
+            > deploy/healthz.json
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: Build and push
+        run: |
+          set -euo pipefail
+          IMG="${{ secrets.ACR_LOGIN_SERVER }}/aicp-demo-ui:${{ steps.tip.outputs.sha }}"
+          docker build -f deploy/Dockerfile.publish -t "$IMG" .
+          docker push "$IMG"
+          echo "pushed $IMG"

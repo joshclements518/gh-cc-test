@@ -1,0 +1,6 @@
+# Product CI: Flutter web artifacts → nginx (ACC-F11). Built context = repo root after flutter build.
+FROM nginx:1.27-alpine
+COPY app/build/web/ /usr/share/nginx/html/
+COPY deploy/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY deploy/healthz.json /usr/share/nginx/html/healthz.json
+EXPOSE 8080
