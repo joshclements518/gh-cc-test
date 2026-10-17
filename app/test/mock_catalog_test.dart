@@ -11,4 +11,16 @@ void main() {
     expect(MockCatalog.folio.length, greaterThanOrEqualTo(3));
     expect(MockCatalog.guest.displayName.isNotEmpty, isTrue);
   });
+
+  test('Harness walk routes exist', () {
+    expect(MockCatalog.harnessWalkRoutes.length, greaterThanOrEqualTo(3));
+    for (final route in MockCatalog.harnessWalkRoutes) {
+      expect(route.id.isNotEmpty, isTrue);
+      expect(route.title.isNotEmpty, isTrue);
+      expect(route.description.isNotEmpty, isTrue);
+      expect(route.duration.isNotEmpty, isTrue);
+      expect(route.distance.isNotEmpty, isTrue);
+      expect(route.stops.length, greaterThanOrEqualTo(3));
+    }
+  });
 }

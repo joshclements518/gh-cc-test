@@ -154,3 +154,24 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class HarnessWalkRoute {
+  const HarnessWalkRoute({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.duration,
+    required this.distance,
+    required this.stops,
+    required this.color,
+    required this.icon,
+  });
+  final String id;
+  final String title;
+  final String description;
+  final String duration;
+  final String distance;
+  final List<String> stops;
+  final dynamic color;
+  final dynamic icon;
+}

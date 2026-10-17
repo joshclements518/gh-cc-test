@@ -1,4 +1,5 @@
 import 'models.dart';
+import 'package:flutter/material.dart';
 
 /// Rich sample catalog for Harborline Navigator demos.
 abstract final class MockCatalog {
@@ -210,6 +211,39 @@ abstract final class MockCatalog {
       location: 'Tender pier',
       category: 'Port',
       description: 'Calm-water kayaking for beginners. Life vests provided.',
+    ),
+  ];
+
+  static final harnessWalkRoutes = <HarnessWalkRoute>[
+    HarnessWalkRoute(
+      id: 'hw1',
+      title: 'Welcome Walk',
+      description: 'Perfect introduction to the ship. Visit key services and dining venues near your stateroom.',
+      duration: '15 min',
+      distance: '0.3 mi',
+      stops: ['Guest Services', 'Coral Room', 'Fitness Studio', 'Sky Deck Pool'],
+      color: const Color(0xFF1A8A8E),
+      icon: Icons.directions_walk,
+    ),
+    HarnessWalkRoute(
+      id: 'hw2',
+      title: 'Entertainment Loop',
+      description: 'Discover all entertainment venues from the Aurora Theater to evening lounges.',
+      duration: '20 min',
+      distance: '0.5 mi',
+      stops: ['Aurora Theater', 'Beacon Lounge', 'Kids Cove', 'Sky Deck'],
+      color: const Color(0xFFE67E50),
+      icon: Icons.theater_comedy,
+    ),
+    HarnessWalkRoute(
+      id: 'hw3',
+      title: 'Wellness Circuit',
+      description: 'A relaxing route through spa, fitness, and quiet deck spaces for morning or evening strolls.',
+      duration: '25 min',
+      distance: '0.7 mi',
+      stops: ['Chart Room Spa', 'Fitness Studio', 'Forward Observation', 'Sky Deck'],
+      color: const Color(0xFF6B9B7D),
+      icon: Icons.spa,
     ),
   ];
 }

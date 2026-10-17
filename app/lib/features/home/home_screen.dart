@@ -5,6 +5,7 @@ import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
 import '../../ui/widgets/release_tips_banner.dart';
 import '../plans/plans_screen.dart';
+import '../harness_walk/harness_walk_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -66,6 +67,18 @@ class HomeScreen extends StatelessWidget {
                       Expanded(child: _ActionTile(icon: Icons.star_outline, label: 'Activities', onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ActivityDetailScreen(eventId: 'e5')));
                       })),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(child: _ActionTile(icon: Icons.map_outlined, label: 'Ship Tours', onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HarnessWalkScreen()));
+                      })),
+                      const SizedBox(width: 10),
+                      const Expanded(child: SizedBox()),
+                      const SizedBox(width: 10),
+                      const Expanded(child: SizedBox()),
                     ],
                   ),
                   const SectionLabel('Up next'),
