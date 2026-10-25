@@ -1,12 +1,22 @@
 import '../data/mock_catalog.dart';
 import '../data/models.dart';
+import 'user_identity_service.dart';
 
 /// Core + external facades (mock implementations — no vendor SDKs).
 class AuthService {
-  bool _signedIn = false;
-  bool get isSignedIn => _signedIn;
-  Future<void> signInDemo() async => _signedIn = true;
-  Future<void> signOut() async => _signedIn = false;
+  AuthService(this.userIdentity);
+
+  final UserIdentityService userIdentity;
+  bool get isSignedIn => userIdentity.hasIdentity;
+
+  Future<void> signInDemo() async {
+    // Honor system auth: identity is created via name entry dialog
+    // This method kept for compatibility but auth now flows through UserIdentityService
+  }
+
+  Future<void> signOut() async {
+    await userIdentity.clearIdentity();
+  }
 }
 
 class GuestProfileService {
@@ -60,7 +70,7 @@ class PrivacyConsentFacade {
 
 class HarborlineServices {
   HarborlineServices()
-      : auth = AuthService(),
+      : userIdentity = UserIdentityService(),
         profile = GuestProfileService(),
         analytics = AnalyticsService(),
         experience = ExperiencePlatform(),
@@ -70,9 +80,12 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade() {
+    auth = AuthService(userIdentity);
+  }
 
-  final AuthService auth;
+  final UserIdentityService userIdentity;
+  late final AuthService auth;
   final GuestProfileService profile;
   final AnalyticsService analytics;
   final ExperiencePlatform experience;
@@ -83,4 +96,9 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+
+  /// Initialize async services (call before runApp)
+  Future<void> init() async {
+    await userIdentity.init();
+  }
 }

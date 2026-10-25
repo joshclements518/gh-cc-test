@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
     final state = AppScope.of(context);
     final onBoard = state.mode == VoyageMode.onBoard;
     final res = MockCatalog.reservation;
-    final name = state.services.profile.profile.displayName.split(' ').first;
+    final name = state.userName ?? 'Guest';
 
     return CustomScrollView(
       slivers: [

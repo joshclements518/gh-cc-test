@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../state/app_state.dart';
 import '../../theme/tokens.dart';
+import '../../ui/widgets/user_badge.dart';
 import '../account/account_screen.dart';
 import '../explore/explore_screen.dart';
 import '../home/home_screen.dart';
@@ -22,9 +24,33 @@ class _MainShellState extends State<MainShell> {
     AccountScreen(),
   ];
 
+  final titles = const [
+    'Home',
+    'Plans',
+    'Explore',
+    'Messages',
+    'Account',
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final state = AppScope.of(context);
+
+    // Home screen has custom hero header, others use AppBar
+    final showAppBar = index != 0;
+
     return Scaffold(
+      appBar: showAppBar
+          ? AppBar(
+              title: Text(titles[index]),
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: UserBadge(),
+                ),
+              ],
+            )
+          : null,
       body: IndexedStack(index: index, children: pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,

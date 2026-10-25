@@ -11,6 +11,13 @@ class AppState extends ChangeNotifier {
   String? lastHybridResult;
 
   bool get signedIn => services.auth.isSignedIn;
+  String? get userName => services.userIdentity.userName;
+
+  Future<void> createUserIdentity(String displayName) async {
+    await services.userIdentity.createIdentity(displayName);
+    services.analytics.track('user_identity_created');
+    notifyListeners();
+  }
 
   Future<void> signIn() async {
     await services.auth.signInDemo();
@@ -20,6 +27,7 @@ class AppState extends ChangeNotifier {
 
   Future<void> signOut() async {
     await services.auth.signOut();
+    services.analytics.track('user_identity_cleared');
     notifyListeners();
   }
 

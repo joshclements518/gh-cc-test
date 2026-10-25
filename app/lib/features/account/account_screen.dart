@@ -13,6 +13,8 @@ class AccountScreen extends StatelessWidget {
     final state = AppScope.of(context);
     final p = state.services.profile.profile;
     final balance = state.services.payments.balance;
+    final userName = state.userName ?? 'Guest';
+    final userId = state.services.userIdentity.userId;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Account')),
@@ -23,26 +25,58 @@ class AccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Eyebrow('Profile'),
+                const Eyebrow('User Identity'),
                 const SizedBox(height: 6),
-                DisplayTitle(p.displayName),
-                Text(p.email, style: const TextStyle(color: HlTokens.inkSoft)),
+                DisplayTitle(userName),
+                if (userId != null)
+                  Text('ID: ${userId.substring(0, 8)}...',
+                    style: const TextStyle(color: HlTokens.inkSoft, fontSize: 12, fontFamily: 'monospace')),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: HlTokens.foam,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.info_outline, size: 18, color: HlTokens.sea),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Honor system identity stored locally on this device',
+                          style: const TextStyle(fontSize: 12, color: HlTokens.ink),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () async {
-                    final controller = TextEditingController(text: p.displayName);
+                    final controller = TextEditingController(text: userName);
                     final next = await showDialog<String>(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        title: const Text('Edit name'),
-                        content: TextField(controller: controller, decoration: const InputDecoration(labelText: 'Display name')),
+                        title: const Text('Edit display name'),
+                        content: TextField(
+                          controller: controller,
+                          decoration: const InputDecoration(labelText: 'Display name'),
+                          autofocus: true,
+                        ),
                         actions: [
                           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-                          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: const Text('Save')),
+                          FilledButton(
+                            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+                            child: const Text('Save'),
+                          ),
                         ],
                       ),
                     );
-                    if (next != null && next.isNotEmpty) state.updateDisplayName(next);
+                    if (next != null && next.isNotEmpty) {
+                      await state.services.userIdentity.updateDisplayName(next);
+                      state.notifyListeners();
+                    }
                   },
                   child: const Text('Edit name'),
                 ),
@@ -147,8 +181,37 @@ class AccountScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           OutlinedButton(
-            onPressed: () => state.signOut(),
-            child: const Text('Log out'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.red,
+              side: const BorderSide(color: Colors.red),
+            ),
+            onPressed: () async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Clear identity?'),
+                  content: const Text(
+                    'This will remove your local identity and return you to the name entry screen. '
+                    'Your device will be treated as a new user.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: const Text('Cancel'),
+                    ),
+                    FilledButton(
+                      style: FilledButton.styleFrom(backgroundColor: Colors.red),
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text('Clear identity'),
+                    ),
+                  ],
+                ),
+              );
+              if (confirmed == true) {
+                await state.signOut();
+              }
+            },
+            child: const Text('Clear identity'),
           ),
         ],
       ),
