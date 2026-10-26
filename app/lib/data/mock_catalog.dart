@@ -121,6 +121,9 @@ abstract final class MockCatalog {
     Venue(id: 'v7', name: 'Beacon Lounge', deck: 'Deck 8', category: 'Lounge', blurb: 'Quiet cocktails and acoustic sets after dinner.', hours: '5p–midnight', tags: ['nightlife']),
     Venue(id: 'v8', name: 'Fitness Studio', deck: 'Deck 14 Fwd', category: 'Fitness', blurb: 'Classes and open gym with sea views.', hours: '6a–9p', tags: ['fitness']),
     Venue(id: 'v9', name: 'Shore Excursions Desk', deck: 'Deck 1', category: 'Services', blurb: 'Port adventures booking and meet-up points.', hours: '9a–6p', tags: ['port']),
+    Venue(id: 'v10', name: 'Wellness Center', deck: 'Deck 12', category: 'Wellness', blurb: 'Holistic health consultations and nutrition planning.', hours: '8a–6p', tags: ['wellness', 'health']),
+    Venue(id: 'v11', name: 'Meditation Sanctuary', deck: 'Deck 13', category: 'Wellness', blurb: 'Guided meditation sessions and mindfulness workshops.', hours: '6a–8p', tags: ['wellness', 'meditation']),
+    Venue(id: 'v12', name: 'Healthy Living Cafe', deck: 'Deck 11', category: 'Wellness', blurb: 'Organic smoothies, wellness teas, and nutritious light bites.', hours: '7a–7p', tags: ['wellness', 'nutrition']),
   ];
 
   static final inbox = <InboxItem>[

@@ -3,6 +3,8 @@ import '../../data/mock_catalog.dart';
 import '../../data/models.dart';
 import '../../theme/tokens.dart';
 import '../../ui/widgets/hl_widgets.dart';
+import '../../ui/widgets/filters/filter_toggle.dart';
+import '../../utils/filter_products.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -13,9 +15,14 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   String query = '';
   String? category;
+  bool wellnessFilterActive = false;
 
   List<Venue> get filtered {
-    return MockCatalog.venues.where((v) {
+    // Apply wellness filter first using pure function
+    var venues = filterProductsByWellness(MockCatalog.venues, wellnessFilterActive);
+
+    // Then apply search and category filters
+    return venues.where((v) {
       final q = query.trim().toLowerCase();
       final matchesQ = q.isEmpty || v.name.toLowerCase().contains(q) || v.tags.any((t) => t.contains(q));
       final matchesC = category == null || v.category == category;
@@ -40,6 +47,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: HlTokens.line)),
             ),
             onChanged: (v) => setState(() => query = v),
+          ),
+          const SizedBox(height: 10),
+          // Wellness filter toggle
+          FilterToggle(
+            icon: '🏥',
+            label: 'Wellness only',
+            isActive: wellnessFilterActive,
+            onChanged: (value) => setState(() => wellnessFilterActive = value),
           ),
           const SizedBox(height: 10),
           SingleChildScrollView(
