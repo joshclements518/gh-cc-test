@@ -63,6 +63,19 @@ class AppState extends ChangeNotifier {
     lastHybridResult = '$name submitted (demo)';
     notifyListeners();
   }
+
+  Future<String> createPoll({required String question, required String deadline}) async {
+    final poll = await services.polls.createPoll(question: question, deadline: deadline);
+    services.analytics.track('poll_created', {'poll_id': poll.id});
+    notifyListeners();
+    return poll.id;
+  }
+
+  Future<void> addPollOption({required String pollId, required String text}) async {
+    await services.polls.addOption(pollId: pollId, text: text);
+    services.analytics.track('poll_option_added', {'poll_id': pollId});
+    notifyListeners();
+  }
 }
 
 class AppScope extends InheritedNotifier<AppState> {

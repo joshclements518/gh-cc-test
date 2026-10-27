@@ -58,6 +58,38 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class PollService {
+  final Map<String, Poll> _polls = {};
+  int _pollCounter = 0;
+  int _optionCounter = 0;
+
+  /// Simulates POST /polls - creates a poll and returns poll id
+  Future<Poll> createPoll({required String question, required String deadline}) async {
+    final id = 'poll_${++_pollCounter}';
+    final poll = Poll(id: id, question: question, deadline: deadline);
+    _polls[id] = poll;
+    return poll;
+  }
+
+  /// Simulates POST /polls/:id/options - adds an option to a poll
+  Future<PollOption> addOption({required String pollId, required String text}) async {
+    final poll = _polls[pollId];
+    if (poll == null) {
+      throw Exception('Poll not found: $pollId');
+    }
+    final optionId = 'opt_${++_optionCounter}';
+    final option = PollOption(id: optionId, pollId: pollId, text: text);
+    poll.options.add(option);
+    return option;
+  }
+
+  /// Gets a poll by id
+  Poll? getPoll(String id) => _polls[id];
+
+  /// Gets all polls
+  List<Poll> getAllPolls() => _polls.values.toList();
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +102,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        polls = PollService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +116,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final PollService polls;
 }

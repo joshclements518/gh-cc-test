@@ -154,3 +154,29 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class Poll {
+  Poll({
+    required this.id,
+    required this.question,
+    required this.deadline,
+    List<PollOption>? options,
+  }) : options = options ?? [];
+
+  final String id;
+  final String question;
+  final String deadline;
+  final List<PollOption> options;
+}
+
+class PollOption {
+  PollOption({
+    required this.id,
+    required this.pollId,
+    required this.text,
+  });
+
+  final String id;
+  final String pollId;
+  final String text;
+}
