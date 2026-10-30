@@ -78,15 +78,16 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
         deadline: _selectedDeadline!,
       );
 
-      // Clear form after successful creation
-      _questionController.clear();
-      _formKey.currentState!.reset();
-
       setState(() {
-        _createdPollId = poll.id;
+        // Clear form after successful creation
+        _questionController.clear();
         _selectedDeadline = null;
+        _createdPollId = poll.id;
         _isSubmitting = false;
       });
+
+      // Reset form validation state after setState
+      _formKey.currentState!.reset();
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
