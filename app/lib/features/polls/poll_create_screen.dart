@@ -59,6 +59,14 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
       return;
     }
 
+    // Validate deadline is selected
+    if (_selectedDeadline == null) {
+      setState(() {
+        _errorMessage = 'Please select a deadline';
+      });
+      return;
+    }
+
     setState(() {
       _isSubmitting = true;
       _errorMessage = null;
@@ -70,15 +78,15 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
         deadline: _selectedDeadline!,
       );
 
-      setState(() {
-        _createdPollId = poll.id;
-        _isSubmitting = false;
-      });
-
       // Clear form after successful creation
       _questionController.clear();
-      _selectedDeadline = null;
       _formKey.currentState!.reset();
+
+      setState(() {
+        _createdPollId = poll.id;
+        _selectedDeadline = null;
+        _isSubmitting = false;
+      });
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
