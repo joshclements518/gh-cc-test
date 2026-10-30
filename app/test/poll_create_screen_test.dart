@@ -46,11 +46,10 @@ void main() {
         ),
       );
 
-      expect(find.text('Create Poll'), findsOneWidget);
+      expect(find.text('Create Poll'), findsNWidgets(2)); // AppBar + Button
       expect(find.byType(TextFormField), findsOneWidget);
       expect(find.text('Question'), findsOneWidget);
       expect(find.text('Deadline'), findsOneWidget);
-      expect(find.text('Create Poll'), findsNWidgets(2)); // AppBar + Button
     });
 
     testWidgets('validates required fields before submit',

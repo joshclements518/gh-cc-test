@@ -78,6 +78,8 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
         deadline: _selectedDeadline!,
       );
 
+      if (!mounted) return;
+
       setState(() {
         // Clear form after successful creation
         _questionController.clear();
@@ -87,8 +89,10 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
       });
 
       // Reset form validation state after setState
-      _formKey.currentState!.reset();
+      _formKey.currentState?.reset();
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         _errorMessage = e.toString();
         _isSubmitting = false;
