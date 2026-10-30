@@ -58,6 +58,21 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class PollService {
+  /// Mock implementation of POST /polls endpoint
+  Future<Poll> createPoll({
+    required String question,
+    required DateTime deadline,
+  }) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    // Mock response with generated id
+    final id = 'poll_${DateTime.now().millisecondsSinceEpoch}';
+    return Poll(id: id, question: question, deadline: deadline);
+  }
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +85,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        polls = PollService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +99,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final PollService polls;
 }
