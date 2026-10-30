@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../data/mock_catalog.dart';
 import '../data/models.dart';
 
@@ -59,22 +61,59 @@ class PrivacyConsentFacade {
 }
 
 class PollService {
-  /// Mock implementation of POST /polls endpoint
+  /// Base URL for the poll API (configurable via environment)
+  final String baseUrl;
+  final http.Client _client;
+
+  PollService({
+    String? baseUrl,
+    http.Client? client,
+  })  : baseUrl = baseUrl ?? const String.fromEnvironment('API_BASE_URL', defaultValue: 'http://localhost:3000'),
+        _client = client ?? http.Client();
+
+  /// POST /polls endpoint - creates a new poll
   Future<Poll> createPoll({
     required String question,
     required DateTime deadline,
   }) async {
-    // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 300));
+    final url = Uri.parse('$baseUrl/polls');
 
-    // Mock response with generated id
-    final id = 'poll_${DateTime.now().millisecondsSinceEpoch}';
-    return Poll(id: id, question: question, deadline: deadline);
+    try {
+      final response = await _client.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'question': question,
+          'deadline': deadline.toIso8601String(),
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        return Poll(
+          id: data['id'] as String,
+          question: data['question'] as String,
+          deadline: DateTime.parse(data['deadline'] as String),
+        );
+      } else if (response.statusCode == 400) {
+        final error = jsonDecode(response.body);
+        throw Exception('Bad request: ${error['message'] ?? 'Invalid input'}');
+      } else if (response.statusCode == 500) {
+        throw Exception('Server error: Failed to create poll');
+      } else {
+        throw Exception('Failed to create poll: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (e is Exception) rethrow;
+      throw Exception('Network error: $e');
+    }
   }
 }
 
 class HarborlineServices {
-  HarborlineServices()
+  HarborlineServices({http.Client? httpClient})
       : auth = AuthService(),
         profile = GuestProfileService(),
         analytics = AnalyticsService(),
@@ -86,7 +125,7 @@ class HarborlineServices {
         chat = ChatFacade(),
         support = SupportFacade(),
         privacy = PrivacyConsentFacade(),
-        polls = PollService();
+        polls = PollService(client: httpClient);
 
   final AuthService auth;
   final GuestProfileService profile;
