@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../data/mock_catalog.dart';
 import '../data/models.dart';
 
@@ -58,6 +60,37 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class PollService {
+  final String baseUrl;
+
+  PollService({this.baseUrl = 'http://localhost:3000'});
+
+  Future<Poll> createPoll({
+    required String question,
+    required DateTime deadline,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/polls'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'question': question,
+        'deadline': deadline.toIso8601String(),
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      return Poll(
+        id: data['id'].toString(),
+        question: data['question'],
+        deadline: DateTime.parse(data['deadline']),
+      );
+    } else {
+      throw Exception('Failed to create poll: ${response.statusCode}');
+    }
+  }
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +103,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        polls = PollService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +117,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final PollService polls;
 }
