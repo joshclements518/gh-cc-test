@@ -154,3 +154,23 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class Poll {
+  const Poll({
+    required this.pollId,
+    required this.question,
+    required this.deadline,
+    required this.status,
+  });
+  final String pollId;
+  final String question;
+  final DateTime deadline;
+  final String status;
+
+  Map<String, dynamic> toJson() => {
+    'pollId': pollId,
+    'question': question,
+    'deadline': deadline.toIso8601String(),
+    'status': status,
+  };
+}

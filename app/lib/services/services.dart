@@ -58,6 +58,27 @@ class PrivacyConsentFacade {
   bool analyticsAllowed = true;
 }
 
+class PollService {
+  final Map<String, Poll> _polls = {};
+  int _nextPollId = 1;
+
+  Poll createPoll({required String question, required DateTime deadline}) {
+    final pollId = 'poll-${_nextPollId++}';
+    final poll = Poll(
+      pollId: pollId,
+      question: question,
+      deadline: deadline,
+      status: 'open',
+    );
+    _polls[pollId] = poll;
+    return poll;
+  }
+
+  Poll? getPoll(String pollId) => _polls[pollId];
+
+  List<Poll> getAllPolls() => _polls.values.toList();
+}
+
 class HarborlineServices {
   HarborlineServices()
       : auth = AuthService(),
@@ -70,7 +91,8 @@ class HarborlineServices {
         push = PushMessagingFacade(),
         chat = ChatFacade(),
         support = SupportFacade(),
-        privacy = PrivacyConsentFacade();
+        privacy = PrivacyConsentFacade(),
+        polls = PollService();
 
   final AuthService auth;
   final GuestProfileService profile;
@@ -83,4 +105,5 @@ class HarborlineServices {
   final ChatFacade chat;
   final SupportFacade support;
   final PrivacyConsentFacade privacy;
+  final PollService polls;
 }
