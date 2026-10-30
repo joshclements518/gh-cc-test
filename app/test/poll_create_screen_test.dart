@@ -14,6 +14,9 @@ class MockPollService extends PollService {
     required String question,
     required DateTime deadline,
   }) async {
+    // Add a small delay to simulate network request
+    await Future.delayed(const Duration(milliseconds: 100));
+
     if (shouldFail) {
       throw Exception(failureMessage ?? 'Failed to create poll');
     }

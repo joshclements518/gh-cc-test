@@ -73,12 +73,11 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
       setState(() {
         _createdPollId = poll.id;
         _isSubmitting = false;
-        // Clear form after successful creation
-        _questionController.clear();
-        _selectedDeadline = null;
       });
 
-      // Reset form validation state
+      // Clear form after successful creation
+      _questionController.clear();
+      _selectedDeadline = null;
       _formKey.currentState!.reset();
     } catch (e) {
       setState(() {
