@@ -1,0 +1,8 @@
+{
+  "name": "gh-cc-test",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "cd app && flutter test test/checkout_total_test.dart"
+  }
+}
