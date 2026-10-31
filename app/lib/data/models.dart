@@ -154,3 +154,14 @@ class GuestProfile {
   bool promoEmail;
   bool promoPush;
 }
+
+class Poll {
+  const Poll({
+    required this.id,
+    required this.question,
+    required this.deadline,
+  });
+  final String id;
+  final String question;
+  final DateTime deadline;
+}
