@@ -164,6 +164,8 @@ void main() {
 
       // Submit the form
       await tester.tap(find.widgetWithText(ElevatedButton, 'Create Poll'));
+      // Wait for the async operation to complete with extra settling time
+      await tester.pump(const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
 
       // Form should be cleared
@@ -235,6 +237,9 @@ void main() {
 
       // Should show loading indicator
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Clean up async operations before test ends
+      await tester.pumpAndSettle();
     });
   });
 }
