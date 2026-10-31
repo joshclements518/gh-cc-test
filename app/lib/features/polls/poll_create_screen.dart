@@ -87,9 +87,6 @@ class _PollCreateScreenState extends State<PollCreateScreen> {
         _createdPollId = poll.id;
         _isSubmitting = false;
       });
-
-      // Reset form validation state after setState
-      _formKey.currentState?.reset();
     } catch (e) {
       if (!mounted) return;
 
